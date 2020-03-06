@@ -1,14 +1,15 @@
-// const Manager = require("./lib/Manager");
-// const Engineer = require("./lib/Engineer");
-// const Intern = require("./lib/Intern");
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
-// const OUTPUT_DIR = path.resolve(__dirname, "output")
-// const outputPath = path.join(OUTPUT_DIR, "team.html");
-// ​
-// const render = require("./lib/htmlRenderer");
+const OUTPUT_DIR = path.resolve(__dirname, "output")
+const outputPath = path.join(OUTPUT_DIR, "team.html");
+const render = require("./lib/htmlRenderer");
+
+const teamMembers = []
 
 const employeeTypeQuestion = [
   {
@@ -25,6 +26,11 @@ const employeeTypeQuestion = [
 ]
 
 const engineerQuestions = [
+  {
+    type: "input",
+    name: "name",
+    message: "What is your name?"
+  },
   {
     type: "input",
     name: "email",
@@ -45,6 +51,11 @@ const engineerQuestions = [
 const internQuestions = [
   {
     type: "input",
+    name: "name",
+    message: "What is your name?"
+  },
+  {
+    type: "input",
     name: "email",
     message: "What is your email?"
   },
@@ -63,6 +74,11 @@ const internQuestions = [
 const managerQuestions = [
   {
     type: "input",
+    name: "name",
+    message: "What is your name?"
+  },
+  {
+    type: "input",
     name: "email",
     message: "What is your email?"
   },
@@ -78,25 +94,58 @@ const managerQuestions = [
   }
 ]
 
+const continueQuestion = [
+  {
+    type: "list",
+    name: "continue",
+    message: "Add another member?",
+    default: "no",
+    choices: [
+      "yes",
+      "no"
+    ]
+  }
+]
+
+const continueInquiry = () => {
+  inquirer.prompt(continueQuestion).then(function(data){
+    if (data.continue === "yes"){
+      getEmployeeData()
+    } else {
+      console.log(teamMembers, "im in continue")
+      writeToFile(teamMembers);
+    }
+  })
+}
+
 const engineerInquiry = () => {
   inquirer.prompt(engineerQuestions).then(function(data) {
-    console.log(data)
+    let engineer = new Engineer(data.name, data.id, data.email, data.github)
+    teamMembers.push(engineer);
+    console.log(teamMembers);
+    continueInquiry();
   })
 }
 
 const internInquiry = () => {
   inquirer.prompt(internQuestions).then(function(data) {
-    console.log(data)
+    let intern = new Intern(data.name, data.id, data.email, data.school)
+    teamMembers.push(intern);
+    console.log(teamMembers);
+    continueInquiry();
   })
 }
 
 const managerInquiry = () => {
   inquirer.prompt(managerQuestions).then(function(data) {
-    console.log(data)
+    let manager = new Manager(data.name, data.id, data.email, data.phone)
+    teamMembers.push(manager);
+    console.log(teamMembers);
+    continueInquiry();
   })
 }
 
-const getEmployeeType = () => {
+const getEmployeeData = () => {
   inquirer.prompt(employeeTypeQuestion).then(function(data) {
     console.log(data.employeeType)
     if (data.employeeType === 'engineer'){
@@ -104,11 +153,22 @@ const getEmployeeType = () => {
     } else if (data.employeeType === 'intern'){
       internInquiry()
     } else if (data.employeeType === 'manager'){
-      managerInquiry()
+      managerInquiry();
     }
   })
 }
-getEmployeeType();
+
+const writeToFile = (data) => {
+  fs.writeFile("./output/team.html", render(data), (err) => {
+    if (err) {
+      return console.log(err);
+    }
+    console.log("Success!")
+  })
+}
+
+getEmployeeData();
+
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 // After the user has input all employees desired, call the `render` function (required
