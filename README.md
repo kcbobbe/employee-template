@@ -31,7 +31,7 @@ Use the interactive CLI to create a visualization of employees in your workplace
 2. Answer the questions in the CLI. You will be promted to choose an employee type, then fill out personal information for the employee. Continue to add as many employees as wanted.
 3. A team.html file will be created in the output folder in your directory. View that file in your browser to see a visualization of your team members.
 
-![CLI](images/template_screenshot.png)
+![CLI](images/CLI.png)
 
 ## Contributors
 1. Katie Bobbe
