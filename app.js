@@ -15,7 +15,7 @@ const employeeTypeQuestion = [
   {
     type: "list",
     name: "employeeType",
-    message: "What type of employee are you?",
+    message: "What type of employee would you like to add?",
     default: "engineer",
     choices: [
       "engineer",
@@ -29,22 +29,22 @@ const engineerQuestions = [
   {
     type: "input",
     name: "name",
-    message: "What is your name?"
+    message: "What is the engineer's name?"
   },
   {
     type: "input",
     name: "email",
-    message: "What is your email?"
+    message: "What is the engineer's email?"
   },
   {
     type: "number",
     name: "id",
-    message: "What is your ID number?"
+    message: "What is the engineer's ID number?"
   },
   {
     type: "input",
     name: "github",
-    message: "What is your GitHub username?"
+    message: "What is the engineer's GitHub username?"
   }
 ]
 
@@ -52,22 +52,22 @@ const internQuestions = [
   {
     type: "input",
     name: "name",
-    message: "What is your name?"
+    message: "What is the intern's name?"
   },
   {
     type: "input",
     name: "email",
-    message: "What is your email?"
+    message: "What is the intern's email?"
   },
   {
     type: "number",
     name: "id",
-    message: "What is your ID number?"
+    message: "What is the intern's ID number?"
   },
   {
     type: "input",
     name: "school",
-    message: "What is the name of your school?"
+    message: "What school does the intern go to?"
   }
 ]
 
@@ -75,22 +75,22 @@ const managerQuestions = [
   {
     type: "input",
     name: "name",
-    message: "What is your name?"
+    message: "What is the manager's name?"
   },
   {
     type: "input",
     name: "email",
-    message: "What is your email?"
+    message: "What is the manager's email?"
   },
   {
     type: "number",
     name: "id",
-    message: "What is your ID number?"
+    message: "What is the manager's ID number?"
   },
   {
     type: "number",
     name: 'phone',
-    message: "What is your office phone number?"
+    message: "What is the manager's office phone number?"
   }
 ]
 
@@ -98,7 +98,7 @@ const continueQuestion = [
   {
     type: "list",
     name: "continue",
-    message: "Add another member?",
+    message: "Add another employee?",
     default: "no",
     choices: [
       "yes",
@@ -112,7 +112,6 @@ const continueInquiry = () => {
     if (data.continue === "yes"){
       getEmployeeData()
     } else {
-      console.log(teamMembers, "im in continue")
       writeToFile(teamMembers);
     }
   })
@@ -122,7 +121,6 @@ const engineerInquiry = () => {
   inquirer.prompt(engineerQuestions).then(function(data) {
     let engineer = new Engineer(data.name, data.id, data.email, data.github)
     teamMembers.push(engineer);
-    console.log(teamMembers);
     continueInquiry();
   })
 }
@@ -131,7 +129,6 @@ const internInquiry = () => {
   inquirer.prompt(internQuestions).then(function(data) {
     let intern = new Intern(data.name, data.id, data.email, data.school)
     teamMembers.push(intern);
-    console.log(teamMembers);
     continueInquiry();
   })
 }
@@ -140,14 +137,12 @@ const managerInquiry = () => {
   inquirer.prompt(managerQuestions).then(function(data) {
     let manager = new Manager(data.name, data.id, data.email, data.phone)
     teamMembers.push(manager);
-    console.log(teamMembers);
     continueInquiry();
   })
 }
 
 const getEmployeeData = () => {
   inquirer.prompt(employeeTypeQuestion).then(function(data) {
-    console.log(data.employeeType)
     if (data.employeeType === 'engineer'){
       engineerInquiry()
     } else if (data.employeeType === 'intern'){
